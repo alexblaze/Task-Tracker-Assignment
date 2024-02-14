@@ -8,7 +8,7 @@ const db = new sqlite3.Database(":memory:");
 // Create table for tasks
 db.serialize(() => {
   db.run(
-    "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, description TEXT, completed BOOLEAN)"
+    "CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY, title TEXT, description TEXT, completed BOOLEAN)"
   );
 });
 

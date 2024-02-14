@@ -15,8 +15,8 @@ const taskController = {
   },
 
   createTask: (req, res) => {
-    const { description } = req.body;
-    Task.create(description, (err, newTask) => {
+    const { title, description } = req.body;
+    Task.create(title, description, (err, newTask) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;

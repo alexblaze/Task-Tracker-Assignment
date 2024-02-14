@@ -4,35 +4,39 @@ const db = require("../config/dbConfig");
 
 // Task model
 class Task {
-  constructor(id, description, completed) {
+  constructor(id, title, description, completed) {
     this.id = id;
+    this.title = title;
     this.description = description;
     this.completed = completed;
   }
 
   static getAll(callback) {
-    db.all("SELECT id, description, completed FROM tasks", (err, rows) => {
-      if (err) {
-        callback(err, null);
-        return;
+    db.all(
+      "SELECT id, title, description, completed FROM tasks",
+      (err, rows) => {
+        if (err) {
+          callback(err, null);
+          return;
+        }
+        const tasks = rows.map(
+          (row) => new Task(row.id, row.title, row.description, !!row.completed)
+        );
+        callback(null, tasks);
       }
-      const tasks = rows.map(
-        (row) => new Task(row.id, row.description, !!row.completed)
-      );
-      callback(null, tasks);
-    });
+    );
   }
 
-  static create(description, callback) {
+  static create(title, description, callback) {
     db.run(
-      "INSERT INTO tasks (description, completed) VALUES (?, ?)",
-      [description, false],
+      "INSERT INTO tasks (title, description, completed) VALUES (?, ?, ?)",
+      [title, description, false],
       function (err) {
         if (err) {
           callback(err, null);
           return;
         }
-        const newTask = new Task(this.lastID, description, false);
+        const newTask = new Task(this.lastID, title, description, false);
         callback(null, newTask);
       }
     );
